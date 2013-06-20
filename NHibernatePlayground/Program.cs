@@ -16,6 +16,48 @@ namespace NHibernatePlayground
         static void Main(string[] args)
         {
             log4net.Config.XmlConfigurator.Configure();
+            //TestConstValueReference();
+            TestAggregatesJoinFetching();
+            Console.ReadLine();
+        }
+
+        private static void TestAggregatesJoinFetching()
+        {
+            var factory = BuildSessionFactory();
+            int id;
+            using (var session = factory.OpenSession())
+            using (var tx = session.BeginTransaction())
+            {
+                var product = new Product() { Name = "EvoBO", Description = "New product" };
+                product.Releases.Add(new Release() { Name = "Release 1" });
+                id = (int)session.Save(product);
+
+                var backlogItem = new BacklogItem() { Name = "Faktury", ProductId = id };
+                session.Save(backlogItem);
+
+                tx.Commit();
+            }
+
+            using (var session = factory.OpenSession())
+            using (var tx = session.BeginTransaction())
+            {
+                var productFuture = session.QueryOver<Product>()
+                    .Where(p => p.Id == id)
+                    .FutureValue();
+                var backlogItems = session.QueryOver<BacklogItem>()
+                    .Where(bi => bi.ProductId == id)
+                    .Future();
+                var product = productFuture.Value;
+                foreach (var bi in backlogItems)
+                {
+                    Console.WriteLine(bi.Name);
+                }
+                tx.Commit();
+            }
+        }
+
+        private static void TestConstValueReference()
+        {
             var factory = BuildSessionFactory();
             object id;
             using (var session = factory.OpenSession())
@@ -32,7 +74,6 @@ namespace NHibernatePlayground
                 session.Delete(doc);
                 session.Flush();
             }
-            Console.ReadLine();
         }
 
         private static ISessionFactory BuildSessionFactory()

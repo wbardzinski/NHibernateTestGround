@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2">
+  <sql-query name="NextCounter" >
+    <return-scalar column="counter" type="Int32"/>
+    EXEC [dbo].[NextCounter] @numberId=:numberId, @counter=:counter
+  </sql-query>
+</hibernate-mapping>

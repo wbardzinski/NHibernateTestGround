@@ -12,5 +12,6 @@
     <property name="default_schema">dbo</property>
     <property name="command_timeout">60</property>
     <property name="hbm2ddl.keywords">auto-quote</property>
+    <property name="generate_statistics">true</property>
   </session-factory>
 </hibernate-configuration>

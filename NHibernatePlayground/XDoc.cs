@@ -21,7 +21,7 @@ namespace NHibernatePlayground
             Map(x => x.AutoDocument);
             Map(Reveal.Member<XDocClass>("Type")).Formula("'AST'");
 
-            HasMany(x => x.Refs).KeyColumn("Type").PropertyRef("Type").Fetch.Join();
+            HasMany(x => x.Refs).KeyColumn("Type").PropertyRef("Type").Fetch.Join().Cascade.None().ReadOnly().Inverse();//.Inverse().Not.ForeignKeyCascadeOnDelete();
         }
     }
     public class XDocClass

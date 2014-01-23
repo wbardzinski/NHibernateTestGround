@@ -1,4 +1,4 @@
-﻿use [nhibernate]
+﻿use [NHibernateTests]
 /****** Object:  Table [dbo].[XDoc]    Script Date: 2013-04-26 14:52:50 ******/
 SET ANSI_NULLS ON
 GO
